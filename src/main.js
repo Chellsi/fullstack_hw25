@@ -18,12 +18,27 @@ console.log('#8. JavaScript homework example file')
  */
 
 function createDomElement(tagName, textContent, container) {
-  // code here
+  // Перевірка наявності контейнера
+  if (!container || !(container instanceof HTMLElement)) {
+    throw new Error('Invalid container provided');
+  }
+
+  // Створення нового елемента з вказаним тегом
+  const newElement = document.createElement(tagName);
+  
+  // Встановлення текстового вмісту елемента
+  newElement.textContent = textContent;
+  
+  // Додавання нового елемента до контейнера
+  container.appendChild(newElement);
+  
+  // Повернення посилання на створений елемент
+  return newElement;
 }
 
 // Демонстрація використання функції
-// const container = document.body // В якості прикладу використовуємо body як контейнер
-// console.log(createDomElement('p', 'This paragraph has been added to the specified container.', container))
+const container = document.body // В якості прикладу використовуємо body як контейнер
+console.log(createDomElement('p', 'This paragraph has been added to the specified container.', container))
 
 /*
  * #2
@@ -42,11 +57,25 @@ function createDomElement(tagName, textContent, container) {
 // setUserInfoCookie.js
 
 function setUserInfoCookie(key, value) {
-  // code here
+  // Перевірка наявності ключа та значення
+  if (!key || !value) {
+    console.error('Key and value must be provided');
+    return;
+  }
+
+  // Кодування значення для безпечного зберігання у cookie
+  const encodedValue = encodeURIComponent(`${key}=${value}`);
+
+  // Встановлення cookie з терміном дії 10 секунд
+  const expires = new Date(Date.now() + 10000).toUTCString();
+  document.cookie = `userInfo=${encodedValue}; expires=${expires}; path=/`;
+
+  // Виведення інформаційного повідомлення у консоль
+  console.log(`Cookie set: userInfo=${encodedValue}, expires=${expires}`);
 }
 
 // Демонстрація використання функції
-// setUserInfoCookie('language', 'en');
+setUserInfoCookie('language', 'en');
 
 /*
  * #3
@@ -69,15 +98,42 @@ function setUserInfoCookie(key, value) {
  */
 
 function saveUserInfo(key, value) {
-  // code here
+  // Перевірка наявності ключа та значення
+  if (!key || !value) {
+    console.error('Key and value must be provided');
+    return;
+  }
+
+  // Зберігання пари ключ-значення в sessionStorage
+  sessionStorage.setItem(key, value);
+
+  // Виведення повідомлення про успішне збереження
+  console.log(`Saved ${key}: ${value}`);
 }
 
 function getUserInfo(key) {
-  // code here
+  // Перевірка наявності ключа
+  if (!key) {
+    console.error('Key must be provided');
+    return null;
+  }
+
+  // Отримання значення за вказаним ключем з sessionStorage
+  const value = sessionStorage.getItem(key);
+
+  // Виведення повідомлення про успішне отримання
+  if (value !== null) {
+    console.log(`Retrieved ${key}: ${value}`);
+  } else {
+    console.log(`No value found for key: ${key}`);
+  }
+
+  // Повернення отриманого значення
+  return value;
 }
 
 // Демонстрація використання функцій
-// saveUserInfo('username', 'JohnDoe');
-// console.log(getUserInfo('username')); // Виведе: JohnDoe
+saveUserInfo('username', 'JohnDoe');
+console.log(getUserInfo('username')); // Виведе: JohnDoe
 
 export { createDomElement, setUserInfoCookie, saveUserInfo, getUserInfo }
